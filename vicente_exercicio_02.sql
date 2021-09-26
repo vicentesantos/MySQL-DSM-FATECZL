@@ -1,0 +1,103 @@
+/********************************
+Banco de Dados - Relacional
+Prof. Francisco Abreu
+Aluno: Vicente Santos Gonçalves
+RA: 1111392111035
+
+********************************/
+
+CREATE SCHEMA vicente_oficina_bd;
+
+CREATE TABLE vicente_oficina_bd.cliente(
+CPF INT NOT NULL,
+NOME VARCHAR(255) NOT NULL,
+ENDERECO VARCHAR(255),
+TELEFONE INT NOT NULL,
+PRIMARY KEY (CPF),
+UNIQUE (CPF)
+);
+
+CREATE TABLE vicente_oficina_bd.produto(
+ID INT NOT NULL,
+DESCRICAO TEXT NOT NULL,
+CUSTO FLOAT NOT NULL,
+PRIMARY KEY (ID),
+UNIQUE (ID)
+);
+
+CREATE TABLE vicente_oficina_bd.servico(
+ID INT NOT NULL,
+DESCRICAO TEXT NOT NULL,
+CUSTO FLOAT NOT NULL,
+TEMPO_REALIZACAO VARCHAR(25),
+PRIMARY KEY (ID),
+UNIQUE (ID)
+);
+
+CREATE TABLE vicente_oficina_bd.veiculo(
+RENAVAN INT,
+CHASSI VARCHAR(100),
+MODELO VARCHAR(100),
+COR TEXT,
+ID_CLIENTE INT,
+PRIMARY KEY (RENAVAN),
+FOREIGN KEY (ID_CLIENTE) REFERENCES cliente(CPF),
+UNIQUE (RENAVAN)
+);
+
+CREATE TABLE vicente_oficina_bd.relato_cliente(
+ID_RELATO INT NOT NULL,
+PROBLEMA TEXT NOT NULL,
+DATA_RELATO DATE NOT NULL,
+ID_VEICULO INT NOT NULL,
+PRIMARY KEY (ID_RELATO),
+FOREIGN KEY (ID_VEICULO) REFERENCES veiculo(RENAVAN),
+UNIQUE (ID_RELATO)
+);
+
+CREATE TABLE vicente_oficina_bd.orcamento(
+ID INT NOT NULL,
+ID_VEICULO INT NOT NULL,
+SITUACAO TINYTEXT,
+VALOR FLOAT,
+DATA_ORCAMENTO DATE,
+PREVISAO_ENTREGRA DATE,
+FORMA_PAGAMENTO TINYTEXT,
+PRIMARY KEY (ID),
+FOREIGN KEY (ID_VEICULO) REFERENCES veiculo(RENAVAN),
+UNIQUE (ID)
+);
+
+CREATE TABLE vicente_oficina_bd.item_servico(
+SITUACAO TINYTEXT NOT NULL,
+ID_ORCAMENTO INT NOT NULL,
+ID_SERVICO INT NOT NULL,
+FOREIGN KEY (ID_ORCAMENTO) REFERENCES orcamento(ID),
+FOREIGN KEY (ID_SERVICO) REFERENCES servico(ID)
+);
+
+CREATE TABLE vicente_oficina_bd.item_produto(
+SITUACAO TINYTEXT NOT NULL,
+CUSTO FLOAT NOT NULL,
+QUANTIDADE INT NOT NULL,
+ID_ORCAMENTO INT NOT NULL,
+ID_PRODUTO INT NOT NULL,
+FOREIGN KEY (ID_ORCAMENTO) REFERENCES orcamento(ID),
+FOREIGN KEY (ID_PRODUTO) REFERENCES produto(ID)
+);
+
+ALTER TABLE vicente_oficina_bd.cliente
+	CHANGE COLUMN NOME NOME_COMPLETO VARCHAR(255);
+    
+ALTER TABLE vicente_oficina_bd.veiculo
+	ADD COLUMN ANO YEAR(4);
+
+DROP TABLE vicente_oficina_bd.item_produto;
+DROP TABLE vicente_oficina_bd.item_servico;
+DROP TABLE vicente_oficina_bd.orcamento;
+DROP TABLE vicente_oficina_bd.relato_cliente;
+DROP TABLE vicente_oficina_bd.veiculo;
+DROP TABLE vicente_oficina_bd.servico;
+DROP TABLE vicente_oficina_bd.produto;
+DROP TABLE vicente_oficina_bd.cliente;
+    
