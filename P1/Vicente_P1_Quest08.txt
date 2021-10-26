@@ -1,0 +1,62 @@
+create schema vicente_p1;
+
+create table vicente_p1.usuarios(
+	ID INT NOT NULL,
+    NOME VARCHAR(255) NOT NULL,
+    DATA_NASC DATE NOT NULL,
+    EMAIL TINYTEXT NOT NULL,
+    GENERO VARCHAR(10),
+    TELEFONE INT,
+    ENDERECO TEXT,
+    PRIMARY KEY (ID),
+    UNIQUE (ID)
+);
+
+alter table vicente_p1.usuarios
+	rename to clientes;
+    
+alter table vicente_p1.clientes
+	add column CPF INT NOT NULL;
+    
+create table vicente_p1.restaurante(
+	CNPJ INT NOT NULL,
+    NOME VARCHAR(255) NOT NULL,
+    ENDERECO TEXT NOT NULL,
+    EMAIL TINYTEXT NOT NULL,
+    TELEFONE INT NOT NULL,
+    PRIMARY KEY (CNPJ),
+    UNIQUE (CNPJ)
+);
+
+create table vicente_p1.produto(
+	ID INT NOT NULL,
+    NOME VARCHAR(255) NOT NULL,
+    CARACTERISTICAS TEXT,
+    PRECO FLOAT NOT NULL,
+    PRIMARY KEY (ID),
+    UNIQUE (ID)
+);
+
+create table vicente_p1.pedido(
+	ID INT NOT NULL,
+    ID_CLIENTE INT NOT NULL,
+    ID_RESTAURANTE INT NOT NULL,
+    ID_PRODUTO INT NOT NULL,
+    VALOR_TOTAL FLOAT NOT NULL,
+    PRIMARY KEY (ID),
+    FOREIGN KEY (ID_CLIENTE) REFERENCES clientes(ID),
+    FOREIGN KEY (ID_RESTAURANTE) REFERENCES restaurante(CNPJ),
+    FOREIGN KEY (ID_PRODUTO) REFERENCES produto(ID),
+    UNIQUE (ID)
+);
+
+create table vicente_p1.detalhe_pedido(
+	QUANTIDADE INT NOT NULL,
+    PRECO_UNITARIO FLOAT NOT NULL,
+	ID_PEDIDO INT NOT NULL,
+    ID_RESTAURANTE INT NOT NULL,
+    ID_PRODUTO INT NOT NULL,
+    FOREIGN KEY (ID_PEDIDO) REFERENCES pedido(ID),
+    FOREIGN KEY (ID_RESTAURANTE) REFERENCES restaurante(CNPJ),
+    FOREIGN KEY (ID_PRODUTO) REFERENCES produto(ID)
+);
